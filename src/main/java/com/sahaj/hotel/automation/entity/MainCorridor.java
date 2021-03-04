@@ -11,23 +11,18 @@ import com.sahaj.hotel.automation.entity.base.IMainCorridor;
 import com.sahaj.hotel.automation.entity.constant.AC_STATE;
 import com.sahaj.hotel.automation.entity.constant.LIGHT_STATE;
 
-import lombok.Builder;
-import lombok.NonNull;
-
-@Builder(toBuilder = true)
 public class MainCorridor implements IMainCorridor {
 
-	@NonNull protected final ILight light;
-	@NonNull protected final IAC ac;
-	@NonNull protected final String id;
+	protected final String id;
 	protected final int  number;
+	protected final IAC ac;
+	protected final ILight light;
 	
-	@Builder
-	public MainCorridor(String id, int number) {
+	public MainCorridor(String id, Integer number, IAC ac, ILight light) {
 		this.id = id == null? UUID.randomUUID().toString(): id;
 		this.number = number;
-		this.light = new Light(LIGHT_ON);
-		this.ac = new AC(AC_ON);
+		this.light = light == null? new Light(LIGHT_ON): light;
+		this.ac = ac == null? new AC(AC_ON): ac;
 	}
 
 	@Override
@@ -66,4 +61,54 @@ public class MainCorridor implements IMainCorridor {
         IMainCorridor corridor = (MainCorridor) obj; 
         return corridor.getNumber() == number; 
 	}
+	
+	private MainCorridorBuilder toBuilder() {
+		return new MainCorridorBuilder(id, number, light, ac);
+	}
+
+	public static  MainCorridorBuilder builder() {
+ 		return new MainCorridorBuilder();
+ 	}
+ 	
+ 	public static class MainCorridorBuilder {
+ 		
+ 		String id;
+ 		Integer  number;
+ 		IAC ac;
+ 		ILight light;
+
+		public MainCorridorBuilder(String id, Integer number, ILight light, IAC ac) {
+			super();
+			this.id = id;
+			this.number = number;
+			this.light = light;
+			this.ac = ac;
+		}
+
+		private MainCorridorBuilder() {}
+ 		
+ 		public MainCorridorBuilder id(String id) {
+ 			this.id = id;
+ 			return this;
+ 		}
+ 		
+ 		public MainCorridorBuilder number(Integer number) {
+ 			this.number = number;
+ 			return this;
+ 		}
+ 		 		
+ 		public MainCorridorBuilder light(ILight light) {
+ 			this.light = light;
+ 			return this;
+ 		}
+ 		
+ 		public MainCorridorBuilder ac(IAC ac) {
+ 			this.ac = ac;
+ 			return this;
+ 		}
+ 		
+ 		public MainCorridor build() {
+ 			return new MainCorridor(id, number, ac, light);
+ 		}
+ 	}
 }

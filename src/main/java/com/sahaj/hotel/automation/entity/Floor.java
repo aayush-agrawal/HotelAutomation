@@ -15,23 +15,19 @@ import com.sahaj.hotel.automation.entity.base.IFloor;
 import com.sahaj.hotel.automation.entity.base.IMainCorridor;
 import com.sahaj.hotel.automation.entity.base.ISubCorridor;
 
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
 
 @Getter
-@Builder(toBuilder=true)
 public class Floor implements IFloor {
 
-	@NonNull protected final String id;
+	protected final String id;
 	protected final int number;
 	protected final int totalConsumption;
 	protected final int allowedConsumption;
-	@NonNull protected final Set<IMainCorridor> mainCorridors;
-	@NonNull protected final Set<ISubCorridor> subCorridors;
+	protected final Set<IMainCorridor> mainCorridors;
+	protected final Set<ISubCorridor> subCorridors;
 	
 
-	@Builder 
 	public Floor(String id, Integer number, Integer totalConsumption, Set<IMainCorridor> mainCorridors, Set<ISubCorridor> subCorridors) {
 
 		this.id = id == null? UUID.randomUUID().toString(): id;
@@ -166,4 +162,66 @@ public class Floor implements IFloor {
         return floor.getNumber() == number; 
 	}
 	
+
+	private FloorBuilder toBuilder() {
+		return new FloorBuilder(id, number, totalConsumption, mainCorridors, subCorridors);
+	}
+
+	public static  FloorBuilder builder() {
+ 		return new FloorBuilder();
+ 	}
+ 	
+ 	public static class FloorBuilder {
+ 		
+ 		String id;
+ 		Integer number;
+ 		Integer totalConsumption;
+ 		Set<IMainCorridor> mainCorridors;
+ 		Set<ISubCorridor> subCorridors;
+
+		public FloorBuilder(String id, Integer number, Integer totalConsumption, Set<IMainCorridor> mainCorridors,
+				Set<ISubCorridor> subCorridors) {
+			super();
+			this.id = id;
+			this.number = number;
+			this.totalConsumption = totalConsumption;
+			this.mainCorridors = mainCorridors;
+			this.subCorridors = subCorridors;
+		}
+ 		
+
+		private FloorBuilder() {}
+ 		
+ 		public FloorBuilder id(String id) {
+ 			this.id = id;
+ 			return this;
+ 		}
+ 		
+ 		public FloorBuilder number(Integer number) {
+ 			this.number = number;
+ 			return this;
+ 		}
+ 		
+ 		public FloorBuilder totalConsumption(Integer totalConsumption) {
+ 			this.totalConsumption = totalConsumption;
+ 			return this;
+ 		}
+ 		
+ 		public FloorBuilder mainCorridors(Set<IMainCorridor> mainCorridors) {
+ 			this.mainCorridors = mainCorridors;
+ 			return this;
+ 		}
+ 		
+ 		public FloorBuilder subCorridors(Set<ISubCorridor> subCorridors) {
+ 			this.subCorridors = subCorridors;
+ 			return this;
+ 		}
+
+ 		
+ 		public Floor build() {
+ 			return new Floor(id, number, totalConsumption, mainCorridors, subCorridors);
+ 		}
+
+ 	}
+
 }

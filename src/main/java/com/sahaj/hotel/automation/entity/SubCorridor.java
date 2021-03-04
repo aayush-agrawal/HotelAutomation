@@ -11,19 +11,16 @@ import com.sahaj.hotel.automation.entity.base.ISubCorridor;
 import com.sahaj.hotel.automation.entity.constant.AC_STATE;
 import com.sahaj.hotel.automation.entity.constant.LIGHT_STATE;
 
-import lombok.Builder;
 import lombok.NonNull;
 
-@Builder(toBuilder = true)
 public class SubCorridor implements ISubCorridor {
 
-	@NonNull protected final ILight light;
-	@NonNull protected final IAC ac;
 	@NonNull protected final String id;
 	protected final int  number;
 	protected final boolean isActive;
+	@NonNull protected final ILight light;
+	@NonNull protected final IAC ac;
 	
-	@Builder
 	public SubCorridor(String id, Integer number, Boolean isActive, ILight light, IAC ac) {
 		this.id = id == null? UUID.randomUUID().toString(): id;
 		this.number = number;
@@ -107,4 +104,62 @@ public class SubCorridor implements ISubCorridor {
         ISubCorridor corridor = (SubCorridor) obj; 
         return corridor.getNumber() == number; 
 	}
+
+	private SubCorridorBuilder toBuilder() {
+		return new SubCorridorBuilder(id, number, isActive, light, ac);
+	}
+
+	public static  SubCorridorBuilder builder() {
+ 		return new SubCorridorBuilder();
+ 	}
+ 	
+ 	public static class SubCorridorBuilder {
+ 		
+ 		private String id;
+ 		private Integer number;
+ 		private Boolean isActive;
+ 		private ILight light;
+ 		private IAC ac;
+
+		public SubCorridorBuilder(String id, Integer number, Boolean isActive, ILight light, IAC ac) {
+			super();
+			this.id = id;
+			this.number = number;
+			this.isActive = isActive;
+			this.light = light;
+			this.ac = ac;
+		}
+
+		private SubCorridorBuilder() {}
+ 		
+ 		public SubCorridorBuilder id(String id) {
+ 			this.id = id;
+ 			return this;
+ 		}
+ 		
+ 		public SubCorridorBuilder number(Integer number) {
+ 			this.number = number;
+ 			return this;
+ 		}
+ 		
+ 		public SubCorridorBuilder isActive(Boolean isActive) {
+ 			this.isActive = isActive;
+ 			return this;
+ 		}
+ 		
+ 		public SubCorridorBuilder light(ILight light) {
+ 			this.light = light;
+ 			return this;
+ 		}
+ 		
+ 		public SubCorridorBuilder ac(IAC ac) {
+ 			this.ac = ac;
+ 			return this;
+ 		}
+ 		
+ 		public SubCorridor build() {
+ 			return new SubCorridor(id, number, isActive, light, ac);
+ 		}
+ 	}
+
 }
